@@ -50,10 +50,10 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\GridGenerator.cs" />
-     <Compile Include="Assets\Scripts\Node.cs" />
      <Compile Include="Assets\Scripts\NodeStatus.cs" />
      <Compile Include="Assets\Astar.cs" />
+     <Compile Include="Assets\Scripts\GridGenerator.cs" />
+     <Compile Include="Assets\Scripts\Node.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>/Users/karim/Desktop/AstarTest/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>

@@ -294,8 +294,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   centerText: {fileID: 5440599907607007224}
-  gCost: {fileID: 638813439710296551}
-  hCost: {fileID: 4527131856429908712}
+  gCostText: {fileID: 638813439710296551}
+  hCostText: {fileID: 4527131856429908712}
 --- !u!1 &8275861450722774083
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,24 +1,64 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Node : MonoBehaviour
 {
     public Text centerText;
-    public Text gCost; // distance from end node
-    public Text hCost; // distance from starting node
+    public Text gCostText; // distance from end node
+    public Text hCostText; // distance from starting node
 
+    [HideInInspector] public Vector2Int position;
+
+    public int f_cost
+    {
+        get { return _g_cost + _h_cost; }
+    }
+
+    public int g_cost
+    {
+        get { return _g_cost; }
+        set
+        {
+            _g_cost = value;
+            gCostText.text = $"{_g_cost}";
+            centerText.text = $"{(_g_cost + _h_cost)}";
+        }
+    }
+
+    public int h_cost
+    {
+        get { return _h_cost; }
+        set
+        {
+            _h_cost = value;
+            hCostText.text = $"{_h_cost}";
+            centerText.text = $"{(_g_cost + _h_cost)}";
+        }
+    }
+
+    [HideInInspector] public Node parentNode;
+
+    private int _g_cost;
+    private int _h_cost;
     private Button _button;
     private Image _image;
     private NodeStatus _status;
+
 
     private void Awake()
     {
         _image = GetComponent<Image>();
         _button = GetComponent<Button>();
         _button.onClick.AddListener(SetObstacle);
-        gCost.text = "";
-        hCost.text = "";
+        EventTrigger trigger = _button.gameObject.AddComponent<EventTrigger>();
+        var pointerDown = new EventTrigger.Entry();
+        pointerDown.eventID = EventTriggerType.PointerEnter;
+        pointerDown.callback.AddListener((e) => status = NodeStatus.OBSTACLE);
+        trigger.triggers.Add(pointerDown);
+        gCostText.text = "";
+        hCostText.text = "";
         centerText.text = "";
     }
 
@@ -27,7 +67,7 @@ public class Node : MonoBehaviour
         get { return _status; }
         set
         {
-            _status = value; 
+            _status = value;
             UpdateWithStatus();
         }
     }
@@ -42,7 +82,7 @@ public class Node : MonoBehaviour
         _status = NodeStatus.OBSTACLE;
         UpdateWithStatus();
     }
-    
+
     void UpdateWithStatus()
     {
         switch (_status)
@@ -66,6 +106,9 @@ public class Node : MonoBehaviour
             case NodeStatus.TARGET:
                 _image.color = Color.yellow;
                 centerText.text = "B";
+                break;
+            case NodeStatus.PATH:
+                _image.color = Color.magenta;
                 break;
         }
     }

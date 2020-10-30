@@ -5,5 +5,6 @@ public enum NodeStatus
     OBSTACLE,
     CLOSED,
     START,
-    TARGET
+    TARGET,
+    PATH,
 }

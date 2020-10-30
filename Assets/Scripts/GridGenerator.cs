@@ -1,5 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+
+public class ObstacleLine
+{
+    public Vector2Int start;
+    public Vector2Int end;
+}
 
 public class GridGenerator : MonoBehaviour
 {
@@ -7,24 +14,16 @@ public class GridGenerator : MonoBehaviour
     public int nodesHeight;
     public Canvas canvas;
     public GameObject nodePrefab;
-
-    public Vector2 start;
-    public Vector2 target;
+    public Vector2Int[] obstacleLines;
 
     [HideInInspector] public List<Node> grid = new List<Node>();
 
-    private void Start()
+    private void Awake()
     {
         GenerateGrid();
-        SetStartAndTarget();
+        //SetObstacleLines();
     }
-
-    void SetStartAndTarget()
-    {
-        grid[(int) (nodesWidth * start.y + start.x)].status = NodeStatus.START;
-        grid[(int) (nodesWidth * target.y + target.x)].status = NodeStatus.TARGET;
-    }
-
+    
     void GenerateGrid()
     {
         float heightUnit = 1f / nodesHeight;
@@ -42,7 +41,27 @@ public class GridGenerator : MonoBehaviour
                 rt.offsetMax = Vector2.zero;
                 rt.anchorMin = new Vector2(x * (widthUnit), y * (heightUnit));
                 rt.anchorMax = new Vector2((x + 1) * widthUnit, (y + 1) * heightUnit);
-                grid.Add(go.GetComponent<Node>());
+                var node = go.GetComponent<Node>();
+                node.position = new Vector2Int(x, y);
+                grid.Add(node);
+            }
+        }
+    }
+
+    void SetObstacleLines()
+    {
+        for (var i = 0; i < obstacleLines.Length; i += 2)
+        {
+            var current = obstacleLines[i];
+            var end = obstacleLines[i + 1];
+
+            while (!current.Equals(end))
+            {
+                grid.Find(n => n.position == current).status = NodeStatus.OBSTACLE;
+                if (current.x != end.x)
+                    current.x += current.x > end.x ? -1 : 1;
+                if (current.y != end.y)
+                    current.y += current.y > end.y ? -1 : +1;
             }
         }
     }
